@@ -6,7 +6,7 @@ const Logo = () => {
     return (
         <div className="flex justify-start m-4">
             <Tilt>
-                <div style={{ height: '80px', width: '80px' }}>
+                <div style={{ height: '100px', width: '100px' }}>
                     <img src={brain} alt="logo"></img>
                 </div>
             </Tilt>
