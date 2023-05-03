@@ -2,7 +2,7 @@ import React from "react";
 
 const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
     return (
-        <div className="flex flex-col items-center mt-12">
+        <div className="flex flex-col items-center mt-10">
             <p className="text-blue-300 text-lg text-center">
                 This magic brain will detect faces in your pictures
             </p>
