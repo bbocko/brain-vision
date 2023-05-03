@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useMediaQuery } from "react-responsive";
 import "./App.css";
 import Navigation from "./components/Navigation/Navigation";
 import Logo from "./components/Logo/Logo";
@@ -49,11 +48,37 @@ const returnClarifaiRequestOptions = (imageURL) => {
 }
 
 function App() {
-  const isDesktop = useMediaQuery({ minDeviceWidth: 1024 });
-  const numParticles = isDesktop ? 50 : 10;
+  const screenWidth = window.innerWidth;
+  let numParticles;
+
+  if (screenWidth >= 1024) {
+    numParticles = 50;
+  } else if (screenWidth >= 640) {
+    numParticles = 25;
+  } else {
+    numParticles = 10;
+  }
 
   const [input, setInput] = useState("");
   const [imageURL, setImageURL] = useState("");
+  const [box, setBox] = useState({});
+
+  const calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("inputImage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+  const displayFaceBox = (box) => {
+    setBox(box);
+  }
 
   const onInputChange = (event) => {
     setInput(event.target.value);
@@ -63,7 +88,8 @@ function App() {
     setImageURL(input);
     fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(input))
       .then(response => response.json())
-      .then(response => console.log(response));
+      .then(response => displayFaceBox(calculateFaceLocation(response)))
+      .catch(err => console.log(err));
   }
 
   return (
@@ -76,9 +102,9 @@ function App() {
         onInputChange={onInputChange}
         onButtonSubmit={onButtonSubmit}
       />
-      <FaceRecognition imageURL={imageURL} />
+      <FaceRecognition box={box} imageURL={imageURL} />
     </div>
   )
 }
 
-export default App
+export default App;
