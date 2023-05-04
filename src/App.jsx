@@ -16,7 +16,7 @@ const returnClarifaiRequestOptions = (imageURL) => {
   const USER_ID = "bbocko";
   const APP_ID = "my-first-application";
   // Change these to whatever model and image URL you want to use
-  const MODEL_ID = "face-detection";
+  const MODEL_ID = "food-item-recognition";
   const IMAGE_URL = imageURL;
 
   const raw = JSON.stringify({
@@ -86,7 +86,7 @@ function App() {
 
   const onButtonSubmit = () => {
     setImageURL(input);
-    fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(input))
+    fetch("https://api.clarifai.com/v2/models/" + "food-item-recognition" + "/outputs", returnClarifaiRequestOptions(input))
       .then(response => response.json())
       .then(response => displayFaceBox(calculateFaceLocation(response)))
       .catch(err => console.log(err));
