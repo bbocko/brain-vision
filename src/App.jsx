@@ -68,7 +68,7 @@ function App() {
   const [input, setInput] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [box, setBox] = useState({});
-  const [route, setRoute] = useState("home");
+  const [route, setRoute] = useState("signin");
 
   // The calculateFaceLocation function takes the Clarifai API response and calculates the location of the face in the image.
   const calculateFaceLocation = (data) => {
@@ -104,6 +104,11 @@ function App() {
       .catch(err => console.log(err));
   }
 
+  // Add event handlers for route changes
+  const onRouteChange = (route) => {
+    setRoute(route);
+  }
+
   return (
     // The App component renders the SignInForm if route is set to "signin" or a RegisterForm if route is set to "register".
     // It renders Navigation, Logo, Rank, ImageLinkForm, and FaceRecognition components if route is set to "home".
@@ -111,12 +116,12 @@ function App() {
     <div className="App">
       <ParticlesBg color="#B8B8B8" num={numParticles} type="cobweb" bg={true} />
       {route === "signin"
-        ? <SignInForm />
+        ? <SignInForm onRouteChange={onRouteChange} />
         : route === "register"
-          ? <RegisterForm />
+          ? <RegisterForm onRouteChange={onRouteChange} />
           : route === "home"
             ? <div>
-              <Navigation />
+              <Navigation onRouteChange={onRouteChange} />
               <Logo />
               <Rank />
               {/* The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL.  */}
@@ -127,7 +132,7 @@ function App() {
               {/* The FaceRecognition component takes in the box and imageURL state variables as props and renders the image with a box around the detected face. */}
               <FaceRecognition box={box} imageURL={imageURL} />
             </div>
-            : <Screen404 />
+            : <Screen404 onRouteChange={onRouteChange} />
       }
     </div>
   )

@@ -1,6 +1,6 @@
 import React from "react";
 
-const SignInForm = () => {
+const SignInForm = ({ onRouteChange }) => {
     return (
         <div className="flex flex-col items-center justify-center mt-20">
             <h2 className="text-blue-200 text-3xl font-bold mb-6">Sign In</h2>
@@ -18,12 +18,19 @@ const SignInForm = () => {
                     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-800 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" />
                 </div>
                 <div className="flex items-center justify-center">
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 active:opacity-80" type="button">
+                    <button
+                        onClick={() => onRouteChange("home")}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-150 active:opacity-80"
+                        type="button">
                         Sign In
                     </button>
                 </div>
             </form>
-            <a href="#" className="text-blue-500">Create new account</a>
+            <p className="text-blue-200 text-sm">
+                New here? <a
+                    onClick={() => onRouteChange("register")}
+                    className="text-blue-500 cursor-pointer">Create your account</a>
+            </p>
         </div>
     );
 }
