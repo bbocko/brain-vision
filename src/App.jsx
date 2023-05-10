@@ -5,7 +5,9 @@ import Logo from "./components/Logo/Logo";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
-import SignIn from "./components/SignIn/SignIn";
+import RegisterForm from "./components/RegisterForm/RegisterForm";
+import SignInForm from "./components/SignInForm/SignInForm";
+import Screen404 from "./components/Screen404/Screen404";
 import ParticlesBg from "particles-bg";
 
 // The returnClarifaiRequestOptions function sets up the options for the Clarifai API request, including the PAT (Personal Access Token), 
@@ -62,10 +64,11 @@ function App() {
     numParticles = 10;
   }
 
-  // The App component initializes the state variables input, imageURL, and box using the useState hook.
+  // The App component initializes the state variables input, imageURL, box and route using the useState hook.
   const [input, setInput] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [box, setBox] = useState({});
+  const [route, setRoute] = useState("home");
 
   // The calculateFaceLocation function takes the Clarifai API response and calculates the location of the face in the image.
   const calculateFaceLocation = (data) => {
@@ -102,19 +105,30 @@ function App() {
   }
 
   return (
-    // The App component renders the Navigation, Logo, Rank, ImageLinkForm, and FaceRecognition components. 
-    // The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL. 
-    // The FaceRecognition component takes in the box and imageURL state variables as props and renders the image with a box around the detected face.
+    // The App component renders the SignInForm if route is set to "signin" or a RegisterForm if route is set to "register".
+    // It renders Navigation, Logo, Rank, ImageLinkForm, and FaceRecognition components if route is set to "home".
+    // It renders 404 page otherwise. 
     <div className="App">
-      <ParticlesBg color="#FFFFFF" num={numParticles} type="cobweb" bg={true} />
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm
-        onInputChange={onInputChange}
-        onButtonSubmit={onButtonSubmit}
-      />
-      <FaceRecognition box={box} imageURL={imageURL} />
+      <ParticlesBg color="#B8B8B8" num={numParticles} type="cobweb" bg={true} />
+      {route === "signin"
+        ? <SignInForm />
+        : route === "register"
+          ? <RegisterForm />
+          : route === "home"
+            ? <div>
+              <Navigation />
+              <Logo />
+              <Rank />
+              {/* The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL.  */}
+              <ImageLinkForm
+                onInputChange={onInputChange}
+                onButtonSubmit={onButtonSubmit}
+              />
+              {/* The FaceRecognition component takes in the box and imageURL state variables as props and renders the image with a box around the detected face. */}
+              <FaceRecognition box={box} imageURL={imageURL} />
+            </div>
+            : <Screen404 />
+      }
     </div>
   )
 }
