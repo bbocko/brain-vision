@@ -69,6 +69,7 @@ function App() {
   const [imageURL, setImageURL] = useState("");
   const [box, setBox] = useState({});
   const [route, setRoute] = useState("signin");
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   // The calculateFaceLocation function takes the Clarifai API response and calculates the location of the face in the image.
   const calculateFaceLocation = (data) => {
@@ -107,6 +108,11 @@ function App() {
   // Add event handlers for route changes
   const onRouteChange = (route) => {
     setRoute(route);
+    if (route === "home") {
+      setIsSignedIn(true)
+    } else {
+      setIsSignedIn(false)
+    }
   }
 
   return (
@@ -115,13 +121,15 @@ function App() {
     // It renders 404 page otherwise. 
     <div className="App">
       <ParticlesBg color="#B8B8B8" num={numParticles} type="cobweb" bg={true} />
+      {route === "home" || route === "signin" || route === "register"
+        ? <Navigation onRouteChange={onRouteChange} isSignedIn={isSignedIn} />
+        : null}
       {route === "signin"
         ? <SignInForm onRouteChange={onRouteChange} />
         : route === "register"
           ? <RegisterForm onRouteChange={onRouteChange} />
           : route === "home"
             ? <div>
-              <Navigation onRouteChange={onRouteChange} />
               <Logo />
               <Rank />
               {/* The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL.  */}
