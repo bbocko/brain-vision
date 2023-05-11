@@ -130,8 +130,8 @@ function App() {
           ? <RegisterForm onRouteChange={onRouteChange} />
           : route === "home"
             ? <div>
-              <Logo />
               <Rank />
+              <Logo />
               {/* The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL.  */}
               <ImageLinkForm
                 onInputChange={onInputChange}
