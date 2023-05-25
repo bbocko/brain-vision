@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Navigation from "./components/Navigation/Navigation";
 import Logo from "./components/Logo/Logo";
@@ -63,6 +63,12 @@ function App() {
   } else {
     numParticles = 10;
   }
+
+  useEffect(() => {
+    fetch("http://localhost:3000")
+      .then(response => response.json())
+      .then(console.log);
+  }, []);
 
   // The App component initializes the state variables input, imageURL, box and route using the useState hook.
   const [input, setInput] = useState("");
