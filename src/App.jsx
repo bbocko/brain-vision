@@ -64,12 +64,6 @@ function App() {
     numParticles = 10;
   }
 
-  useEffect(() => {
-    fetch("http://localhost:3000")
-      .then(response => response.json())
-      .then(console.log);
-  }, []);
-
   // The App component initializes the state variables input, imageURL, box and route using the useState hook.
   const [input, setInput] = useState("");
   const [imageURL, setImageURL] = useState("");
