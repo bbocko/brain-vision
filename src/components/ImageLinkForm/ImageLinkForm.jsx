@@ -1,6 +1,6 @@
 import React from "react";
 
-const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
+const ImageLinkForm = ({ onInputChange, onPictureSubmit }) => {
     return (
         <div className="flex flex-col items-center mt-10">
             <p className="text-blue-200 text-lg text-center">
@@ -14,7 +14,7 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
                     onChange={onInputChange} />
                 <button
                     className="px-4 py-2 rounded-lg text-white bg-blue-500 hover:bg-blue-600 transition duration-150 active:opacity-80 w-full sm:w-auto"
-                    onClick={onButtonSubmit}>
+                    onClick={onPictureSubmit}>
                     Detect
                 </button>
             </div>
