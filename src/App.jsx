@@ -11,7 +11,7 @@ import Screen404 from "./components/Screen404/Screen404";
 import ParticlesBg from "particles-bg";
 
 // The returnClarifaiRequestOptions function sets up the options for the Clarifai API request, including the PAT (Personal Access Token), 
-// USER_ID, APP_ID, MODEL_ID, and IMAGE_URL. It returns a requestOptions object that is used in the onButtonSubmit function.
+// USER_ID, APP_ID, MODEL_ID, and IMAGE_URL. It returns a requestOptions object that is used in the onPictureSubmit function.
 const returnClarifaiRequestOptions = (imageURL) => {
   // Your PAT (Personal Access Token) can be found in the portal under Authentification
   const PAT = "c98bfa9a1cca44ae8b1017beccc10634";
@@ -64,12 +64,30 @@ function App() {
     numParticles = 10;
   }
 
-  // The App component initializes the state variables input, imageURL, box and route using the useState hook.
+  // The App component initializes the state variables input, imageURL, box, route and user using the useState hook.
   const [input, setInput] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [box, setBox] = useState({});
   const [route, setRoute] = useState("signin");
   const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: ""
+  });
+
+  // The loadUser function updates state with the user we receive
+  const loadUser = (data) => {
+    setUser({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+    });
+  };
 
   // The calculateFaceLocation function takes the Clarifai API response and calculates the location of the face in the image.
   const calculateFaceLocation = (data) => {
@@ -90,18 +108,37 @@ function App() {
     setBox(box);
   }
 
-  // The onInputChange function sets the input state variable with the input from the user, and the onButtonSubmit function sets the imageURL 
+  // The onInputChange function sets the input state variable with the input from the user, and the onPictureSubmit function sets the imageURL 
   // state variable with the input and makes a request to the Clarifai API.
   const onInputChange = (event) => {
     setInput(event.target.value);
   }
 
-  const onButtonSubmit = () => {
+  const onPictureSubmit = () => {
     setImageURL(input);
     fetch("https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs", returnClarifaiRequestOptions(input))
       .then(response => response.json())
       // If the response is successful, it passes the response to the calculateFaceLocation and displayFaceBox functions.
-      .then(response => displayFaceBox(calculateFaceLocation(response)))
+      .then(response => {
+        if (response) {
+          fetch("http://localhost:3000/image", {
+            method: "put",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              "id": user.id
+            })
+          })
+            .then(response => response.json())
+            .then(count => {
+              setUser(prevUser => ({
+                ...prevUser,
+                entries: count
+              }));
+            })
+            .catch(err => console.log(err));
+        }
+        displayFaceBox(calculateFaceLocation(response))
+      })
       .catch(err => console.log(err));
   }
 
@@ -125,17 +162,17 @@ function App() {
         ? <Navigation onRouteChange={onRouteChange} isSignedIn={isSignedIn} />
         : null}
       {route === "signin"
-        ? <SignInForm onRouteChange={onRouteChange} />
+        ? <SignInForm loadUser={loadUser} onRouteChange={onRouteChange} />
         : route === "register"
-          ? <RegisterForm onRouteChange={onRouteChange} />
+          ? <RegisterForm loadUser={loadUser} onRouteChange={onRouteChange} />
           : route === "home"
             ? <div>
-              <Rank />
+              <Rank name={user.name} entries={user.entries} />
               <Logo />
-              {/* The ImageLinkForm component takes in the onInputChange and onButtonSubmit functions as props and renders a form for the user to input an image URL.  */}
+              {/* The ImageLinkForm component takes in the onInputChange and onPictureSubmit functions as props and renders a form for the user to input an image URL.  */}
               <ImageLinkForm
                 onInputChange={onInputChange}
-                onButtonSubmit={onButtonSubmit}
+                onPictureSubmit={onPictureSubmit}
               />
               {/* The FaceRecognition component takes in the box and imageURL state variables as props and renders the image with a box around the detected face. */}
               <FaceRecognition box={box} imageURL={imageURL} />
