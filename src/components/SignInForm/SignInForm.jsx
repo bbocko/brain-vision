@@ -15,8 +15,20 @@ const SignInForm = ({ onRouteChange }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log(email, password);
-        onRouteChange("home");
+        fetch("http://localhost:3000/signin", {
+            method: "post",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                "email": email,
+                "password": password
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data === "Successfully signed in") {
+                    onRouteChange("home");
+                }
+            })
     };
 
     return (
