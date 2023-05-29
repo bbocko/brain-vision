@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SignInForm = ({ onRouteChange }) => {
+const SignInForm = ({ onRouteChange, loadUser }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -19,16 +19,21 @@ const SignInForm = ({ onRouteChange }) => {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                "email": email,
-                "password": password
+                email: email,
+                password: password
             })
         })
             .then(response => response.json())
-            .then(data => {
-                if (data === "Successfully signed in") {
+            .then(user => {
+                if (user.id) {
+                    loadUser(user);
                     onRouteChange("home");
                 }
             })
+            .catch(error => {
+                // Handle any error that occurs during the fetch request
+                console.log("Error:", error);
+            });
     };
 
     return (
