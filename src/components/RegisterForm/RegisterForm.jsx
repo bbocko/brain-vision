@@ -20,7 +20,7 @@ const RegisterForm = ({ onRouteChange, loadUser }) => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch("http://localhost:3000/register", {
+        fetch("https://brain-vision-api.onrender.com/register", {
             method: "post",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
