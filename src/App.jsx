@@ -144,6 +144,20 @@ function App() {
 
   // Add event handlers for route changes
   const onRouteChange = (route) => {
+    // Reset state when route is not "home"
+    if (route !== "home") {
+      setInput("");
+      setImageURL("");
+      setBox({});
+      setUser({
+        id: "",
+        name: "",
+        email: "",
+        entries: 0,
+        joined: ""
+      });
+    }
+
     setRoute(route);
     if (route === "home") {
       setIsSignedIn(true)
