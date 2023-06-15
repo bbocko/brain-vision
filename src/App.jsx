@@ -14,11 +14,11 @@ import ParticlesBg from "particles-bg";
 // USER_ID, APP_ID, MODEL_ID, and IMAGE_URL. It returns a requestOptions object that is used in the onPictureSubmit function.
 const returnClarifaiRequestOptions = (imageURL) => {
   // Your PAT (Personal Access Token) can be found in the portal under Authentification
-  const PAT = process.env.REACT_APP_PAT;
+  const PAT = "c98bfa9a1cca44ae8b1017beccc10634";
   // Specify the correct user_id/app_id pairings
   // Since you"re making inferences outside your app"s scope
-  const USER_ID = process.env.REACT_APP_USER_ID;
-  const APP_ID = process.env.REACT_APP_APP_ID;
+  const USER_ID = "bbocko";
+  const APP_ID = "my-first-application";
   // Change these to whatever model and image URL you want to use
   const MODEL_ID = "face-detection";
   const IMAGE_URL = imageURL;
